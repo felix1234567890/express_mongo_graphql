@@ -1,12 +1,9 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const isAuth = require("../middleware/isAuth");
-const {
-  UserInputError,
-  AuthenticationError,
-  ApolloError,
-} = require("apollo-server-express");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { User } from "../models/User.js";
+import isAuth from "../middleware/isAuth.js";
+import { GraphQLError } from "graphql";
+import { Types } from "mongoose";
 
 const secret = process.env.SECRET_KEY;
 
@@ -19,7 +16,7 @@ const hashPassword = async (pass) => {
   const password = await bcrypt.hash(pass, salt);
   return password;
 };
-module.exports = {
+export default {
   Query: {
     users: async () => {
       const users = await User.find()
@@ -28,6 +25,11 @@ module.exports = {
       return users;
     },
     user: async (_, { id }) => {
+      if (!Types.ObjectId.isValid(id)) {
+        throw new GraphQLError("Invalid id", {
+          extensions: { code: "BAD_USER_INPUT" },
+        });
+      }
       return await User.findById(id).populate("timesheets");
     },
   },
@@ -35,7 +37,7 @@ module.exports = {
     deleteUser: async (_, { id }, { req }) => {
       const res = isAuth(req);
       if (id !== res.id) {
-        throw new ApolloError("Cannot delete another user", 500);
+        throw new GraphQLError("Cannot delete another user", 500);
       }
       return await User.findByIdAndRemove(id);
     },
@@ -45,10 +47,8 @@ module.exports = {
     ) => {
       const usr = await User.findOne({ email });
       if (usr) {
-        throw new UserInputError("Email is already taken", {
-          errors: {
-            email: "Email has been taken",
-          },
+        throw new GraphQLError("Email is already taken", {
+          extensions: { code: "BAD_USER_INPUT" },
         });
       }
       password = await hashPassword(password);
@@ -63,7 +63,7 @@ module.exports = {
     ) => {
       const res = isAuth(req);
       const user = await User.findById(res.id);
-      if (!user) throw new Error("User doesn'\t exist");
+      if (!user) throw new GraphQLError("User doesn'\t exist");
       if (firstName) user.firstName = firstName;
       if (lastName) user.lastName = lastName;
       if (email) user.email = email;
@@ -75,11 +75,13 @@ module.exports = {
     login: async (_, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user) {
-        throw new AuthenticationError("User with this email doesn't exist");
+        throw new GraphQLError("User with this email doesn't exist");
       }
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        throw new AuthenticationError("Wrong credentials");
+        throw new GraphQLError("Wrong credentials", {
+          extensions: { code: "UNAUTHENTICATED" },
+        });
       }
       return generateToken(user.id, "1h");
     },

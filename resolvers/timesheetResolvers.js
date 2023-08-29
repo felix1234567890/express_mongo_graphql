@@ -1,9 +1,9 @@
-const Timesheet = require("../models/TimeSheet");
-const User = require("../models/User");
-const isAuth = require("../isAuth");
-const { ApolloError } = require("apollo-server-express");
+import { Timesheet } from "../models/TimeSheet.js";
+import { User } from "../models/User.js";
+import isAuth from "../middleware/isAuth.js";
+import { GraphQLError } from "graphql";
 
-module.exports = {
+export default {
   Query: {
     timesheets: async (_, { limit }) => {
       let timesheets;
@@ -33,7 +33,7 @@ module.exports = {
       const start = new Date(startTime).getTime();
       const end = new Date(endTime).getTime();
       if (start > end) {
-        throw new ApolloError("End time should come after start time", 500);
+        throw new GraphQLError("End time should come after start time", 500);
       }
       const timesheet = new Timesheet();
       timesheet.date = date;
@@ -52,10 +52,10 @@ module.exports = {
       { req }
     ) => {
       const timesheet = await Timesheet.findById(id);
-      if (!timesheet) throw new ApolloError("Timesheet not found", 404);
+      if (!timesheet) throw new GraphQLError("Timesheet not found", 404);
       const res = isAuth(req);
       if (timesheet.user != res.id) {
-        throw new ApolloError(
+        throw new GraphQLError(
           "You cannot update someone else's timesheet",
           405
         );
@@ -69,9 +69,9 @@ module.exports = {
     deleteTimesheet: async (_, { id }, { req }) => {
       const res = isAuth(req);
       const timesheet = await Timesheet.findById(id);
-      if (!timesheet) throw new ApolloError("Timesheet not found", 404);
+      if (!timesheet) throw new GraphQLError("Timesheet not found", 404);
       if (timesheet.user != res.id) {
-        throw new ApolloError("You cannot delete other's timesheet", 405);
+        throw new GraphQLError("You cannot delete other's timesheet", 405);
       }
       await Timesheet.findByIdAndRemove(id);
       return "Timesheet successfully deleted";

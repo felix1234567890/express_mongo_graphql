@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose"
 
 const userSchema = new Schema({
   firstName: {
@@ -34,5 +34,5 @@ const userSchema = new Schema({
   profile: { type: Schema.Types.ObjectId, ref: "Profile" },
   timesheets: [{ type: Schema.Types.ObjectId, ref: "Timesheet" }],
 });
-const User = model("User", userSchema);
-module.exports = User;
+export const User = model("User", userSchema);
+

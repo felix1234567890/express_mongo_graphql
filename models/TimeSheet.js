@@ -1,5 +1,4 @@
-const { Schema, model } = require("mongoose");
-const timezone = require("mongoose-timezone");
+import { Schema, model } from "mongoose"
 
 const timeSheetSchema = new Schema({
   date: {
@@ -19,6 +18,5 @@ const timeSheetSchema = new Schema({
     ref: "User",
   },
 });
-timeSheetSchema.plugin(timezone);
-const Timesheet = model("Timesheet", timeSheetSchema);
-module.exports = Timesheet;
+export const Timesheet = model("Timesheet", timeSheetSchema);
+

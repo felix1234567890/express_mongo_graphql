@@ -1,8 +1,9 @@
-const { GraphQLScalarType } = require("graphql");
-const { Kind } = require("graphql/language");
-const moment = require("moment");
+import { GraphQLScalarType } from "graphql";
+import { Kind } from "graphql"
+import moment from "moment"
+import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 
-module.exports = {
+export default {
   Date: new GraphQLScalarType({
     name: "Date",
     description: "Date custom scalar type",
@@ -35,4 +36,5 @@ module.exports = {
       return null;
     },
   }),
+  Upload: GraphQLUpload,
 };

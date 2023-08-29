@@ -1,7 +1,8 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "graphql-tag"
 
-module.exports = gql`
-  type Profile {
+export default gql`
+scalar Upload
+type Profile {
     id: ID!
     filename: String!
     user: User

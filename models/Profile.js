@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose"
 
 const profileSchema = new Schema({
   filename: {
@@ -10,4 +10,4 @@ const profileSchema = new Schema({
     ref: "User",
   },
 });
-module.exports = model("Profile", profileSchema);
+export const Profile = model("Profile", profileSchema);

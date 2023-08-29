@@ -1,9 +1,9 @@
-const userResolvers = require("./userResolvers");
-const scalarResolvers = require("./scalarResolvers");
-const timeSheetResolvers = require("./timesheetResolvers");
-const profileResolvers = require("./profileResolvers");
+import userResolvers from "./userResolvers.js"
+import scalarResolvers from "./scalarResolvers.js"
+import timeSheetResolvers from "./timesheetResolvers.js"
+import profileResolvers from "./profileResolvers.js"
 
-module.exports = {
+export default {
   ...scalarResolvers,
   Query: {
     ...userResolvers.Query,

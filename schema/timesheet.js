@@ -1,6 +1,6 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "graphql-tag"
 
-module.exports = gql`
+export default gql`
   type Timesheet {
     id: ID!
     date: Date!
