@@ -1,6 +1,6 @@
-import { gql } from "graphql-tag"
+import { gql } from 'graphql-tag'
 
 export default gql`
   scalar Date
   scalar Time
-`;
+`

@@ -1,4 +1,4 @@
-import { gql } from "graphql-tag"
+import { gql } from 'graphql-tag'
 
 export default gql`
 scalar Upload
@@ -16,4 +16,4 @@ type Profile {
     deleteProfile(id: ID!): String!
     updateProfile(file: Upload!, id: ID!): Profile
   }
-`;
+`

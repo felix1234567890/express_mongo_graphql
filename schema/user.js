@@ -1,4 +1,4 @@
-import { gql } from "graphql-tag"
+import { gql } from 'graphql-tag'
 
 export default gql`
   type User {
@@ -31,4 +31,4 @@ export default gql`
     updateUser(updateUserInput: UpdateUser): User!
     deleteUser(id: String!): User
   }
-`;
+`

@@ -1,4 +1,4 @@
-import { gql } from "graphql-tag"
+import { gql } from 'graphql-tag'
 
 export default gql`
   type Timesheet {
@@ -29,4 +29,4 @@ export default gql`
     deleteTimesheet(id: String!): String!
     updateTimesheet(updateTimesheetInput: UpdateTimesheet): Timesheet!
   }
-`;
+`

@@ -1,13 +1,13 @@
-import { Schema, model } from "mongoose"
+import { Schema, model } from 'mongoose'
 
 const profileSchema = new Schema({
   filename: {
     type: String,
-    required: true,
+    required: true
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-});
-export const Profile = model("Profile", profileSchema);
+    ref: 'User'
+  }
+})
+export const Profile = model('Profile', profileSchema)
